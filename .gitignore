@@ -1,0 +1,10 @@
+.vs/
+include/
+x64/
+YauMeeting.sln/
+YauMeetingClient/x64/
+YauMeetingServer/x64/
+*.vcxproj
+*.vcxproj.filters
+*.vcxproj.user
+*.sln
