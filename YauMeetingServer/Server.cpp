@@ -1,18 +1,26 @@
 #include "Server.h"
 
-Server::Server(int server_port, int user_port, int max_room, std::string filedir) :
-	server_port(server_port), user_port(user_port), max_room(max_room), filedir(filedir) {
+void Server::initServer(int server_port, int user_port, int max_room, std::string filedir) 
+{
 	io_context.run();
+	
+	this->server_port = server_port;
+	this->user_port = user_port;
+	this->max_room = max_room;
+	this->filedir = filedir;
 
-	db = new Database(filedir);
 	log = new Logger();
 	roomManager = new RoomManager();
 	userManager = new UserManager();
-	db->openfile();
+	Database::getInstance().openfile();
 
 	socket = new asio::ip::udp::socket(io_context,
 		asio::ip::udp::endpoint(asio::ip::udp::v4(), server_port));
 	
+}
+Server::Server()
+{
+
 }
 Server::~Server() {
 
@@ -22,7 +30,6 @@ Server::~Server() {
 
 
 	delete socket;
-	delete db;
 	delete log;
 	delete roomManager;
 	delete userManager;
@@ -41,7 +48,6 @@ void Server::run() {
 
 	thread_recv.detach();
 	logMessage("Server Started Running...");
-
 
 }
 
@@ -157,7 +163,7 @@ void Server::handleMessage(std::array<char, 1024> msg, const asio::ip::udp::endp
 		std::string username = std::string(msg.data() + sizeof(TypeHeader) + sizeof(LoginHeader), loginheader->username_len);
 		std::string password = std::string(msg.data() + sizeof(TypeHeader) + sizeof(LoginHeader) + loginheader->username_len, loginheader->password_len);
 
-		if (!db->checkUser(username, password)) {
+		if (!Database::getInstance().checkUser(username, password)) {
 			TypeHeader* rettypeheader = new TypeHeader();
 			rettypeheader->type = 2;
 			
@@ -221,7 +227,15 @@ void Server::handleMessage(std::array<char, 1024> msg, const asio::ip::udp::endp
 
 	}
 	else if (typeheader->type == 5) {
+		//LogoffHeader has username_len, we should read the username from the following of msg.
+		//then remove the user from the userOnline list, and also remove the user from the room.
 
+		LogoffHeader* logoffheader = new LogoffHeader();
+		memcpy(logoffheader, msg.data() + sizeof(TypeHeader), sizeof(LogoffHeader));
+		std::string username = std::string(msg.data() + sizeof(TypeHeader) + sizeof(LogoffHeader), logoffheader->username_len);
+		userManager->removeUserOnline(username);
+		//remove the user from the room
+		roomManager->removeUser(username);
 	}
 }
 

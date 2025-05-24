@@ -23,6 +23,8 @@ public:
 	void deleteRoom(int roomid);
 	void addUserToRoom(int roomid, const std::string& username,const asio::ip::udp::endpoint& endpoint);
 	void removeUserFromRoom(int roomid, const std::string& username);
+	void removeUser(const std::string& username);
+
 	bool isUserInRoom(int roomid, const std::string& username);
 	bool isRoomExist(int roomid);
 	int getRoomPort(int roomid);

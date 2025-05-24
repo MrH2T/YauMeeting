@@ -32,7 +32,7 @@ Room::Room(int roomid, int port)
 			if (message_queue.empty()) {
 				continue;
 			}
-			spreadMessage(message.first, message.second);
+			handleMessage(message.first, message.second);
 		}
 		});
 }
@@ -54,6 +54,32 @@ void Room::spreadMessage(std::array<char, 1024> data, const asio::ip::udp::endpo
 			socket->send_to(asio::buffer(data), user.second);
 		}
 	}
+}
+void Room::handleMessage(std::array<char, 1024> data, const asio::ip::udp::endpoint& from) {
+	//this function read the messages from the room users
+	//for type 1,2,5, this should not be here and return directly
+	//for type 3, spread it at once (but if the mes is a text, which should be read, it's also saved in dialog.)
+	//for type 4, this's a control one. We have kick, mute(unmute), stop (for now). 
+	//the control message should be specific command with proper format.
+	//kick: "kick <username>"
+	//mute: "mute <username>"
+	//unmute: "unmute <username>"
+	//stop: "stop"
+	TypeHeader* typeheader = new TypeHeader();
+	memcpy(typeheader, data.data(), sizeof(TypeHeader));
+
+	if (typeheader->type == 3) {
+		DataHeader* dataheader= new DataHeader();
+		memcpy(dataheader, data.data() + sizeof(TypeHeader), sizeof(dataheader));
+
+
+	}
+	else if(typeheader->type == 4){
+		ControlHeader* controlheader = new ControlHeader();
+		memcpy(controlheader, data.data() + sizeof(TypeHeader), sizeof(ControlHeader));
+
+	}
+
 }
 
 void Room::addUser(const std::string& username, const asio::ip::udp::endpoint& endpoint)
@@ -126,4 +152,8 @@ std::string Room::getDialog()
 		return dialog;
 	}
 	return std::string();
+}
+
+void Room::analysisData()
+{
 }

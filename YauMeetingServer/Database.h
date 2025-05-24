@@ -16,9 +16,16 @@ class Database
 private:
 	std::string filedir;
 public:
-	std::map<std::string, std::string> usermap;
-	Database(std::string filedir) : filedir(filedir) {}
+	static Database& getInstance()
+	{
+		static Database instance;
+		return instance;
+	}
+	Database();
+	void initDatabase(std::string filedir);
 	~Database();
+
+	std::map<std::string, std::string> usermap;
 	void openfile();
 	void savefile();
 	void adduser(std::string id, std::string pwd);

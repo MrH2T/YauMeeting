@@ -31,7 +31,7 @@ public:
 	~Room();
 
 	void spreadMessage(std::array<char, 1024> data, const asio::ip::udp::endpoint& from);
-
+	void handleMessage(std::array<char, 1024> data, const asio::ip::udp::endpoint& from);
 
 	void addUser(const std::string& username, const asio::ip::udp::endpoint & endpoint);
 	void removeUser(const std::string& username);
@@ -42,5 +42,6 @@ public:
 	void setDialog(const std::string& dialog);
 	std::string getDialog();
 	
+	void analysisData();
 };
 

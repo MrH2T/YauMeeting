@@ -6,6 +6,7 @@
 #include<mutex>
 #include<utility>
 #include<array>
+#include<memory>
 
 #include"asio.hpp"
 
@@ -21,11 +22,17 @@
 class Server
 {
 public:
+	static Server& getInstance() {
+		static Server instance;
+		return instance;
+	}
+
+	Server();
+
+	void initServer(int server_port, int user_port, int max_room, std::string filedir);
+
 	asio::io_context io_context;
 
-
-
-	Server(int server_port, int user_port, int max_room, std::string filedir);
 	~Server();
 
 
@@ -49,7 +56,6 @@ private:
 	int server_port, user_port;
 	int max_room;
 	std::string filedir;
-	Database* db;
 	Logger* log;
 	RoomManager* roomManager;
 	UserManager* userManager;

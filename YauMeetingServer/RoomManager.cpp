@@ -113,3 +113,13 @@ std::string RoomManager::getRoomPassword(int roomid)
 	}
 	return "";
 }
+
+void RoomManager::removeUser(const std::string& username)
+{
+	std::lock_guard<std::mutex> lock(room_mutex);
+	for (auto& room : rooms) {
+		if( room.second->isUserInRoom(username)) {
+			room.second->removeUser(username);
+		}
+	}
+}

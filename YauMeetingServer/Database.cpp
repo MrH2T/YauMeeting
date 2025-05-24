@@ -1,5 +1,13 @@
 #include "Database.h"
 #include<fstream>
+Database::Database()
+{
+
+}
+void Database::initDatabase(std::string path)
+{
+	filedir = path;
+}
 Database::~Database()
 {
 	savefile();
