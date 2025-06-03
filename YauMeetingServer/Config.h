@@ -5,11 +5,11 @@
 
 namespace Config {
 
-	const int SERVER_PORT = 60114;
+	constexpr int SERVER_PORT = 40114;
 
-	const int USER_PORT = 60514;
+	constexpr int USER_PORT = 40514;
 
-	const int MAX_ROOM = 20;
+	constexpr int MAX_ROOM = 20;
 
-	const int ROOM_PORT = 58000;
+	constexpr int ROOM_PORT = 58000;
 }

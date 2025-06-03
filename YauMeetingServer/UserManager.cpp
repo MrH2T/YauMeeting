@@ -31,3 +31,8 @@ bool UserManager::isUserOnline(const std::string& username)
 	return userOnline.find(username) != userOnline.end();
 }
 
+void UserManager::clearAllUsers()
+{
+	userOnline.clear();
+}
+

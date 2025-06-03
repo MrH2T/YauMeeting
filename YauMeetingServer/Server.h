@@ -7,6 +7,7 @@
 #include<utility>
 #include<array>
 #include<memory>
+#include<atomic>
 
 #include"asio.hpp"
 
@@ -59,6 +60,8 @@ private:
 	Logger* log;
 	RoomManager* roomManager;
 	UserManager* userManager;
+
+	std::atomic<bool> running;
 
 	std::thread thread_recv;
 	asio::ip::udp::socket* socket;

@@ -7,6 +7,7 @@
 #include<ctime>
 #include<queue>
 #include<array>
+#include<atomic>
 
 #include"asio.hpp"
 class Room
@@ -17,6 +18,7 @@ public:
 	std::string pwd;
 	std::string presenter;
 
+	std::atomic<bool> running;
 	std::thread thread_recv, thread_send;
 
 	std::string dialog;
@@ -40,6 +42,8 @@ public:
 	void setPresenter(const std::string& presenter);
 	void setRoomPassword(const std::string& pwd);
 	void setDialog(const std::string& dialog);
+
+	void updateUserList();
 	std::string getDialog();
 	
 	void analysisData();

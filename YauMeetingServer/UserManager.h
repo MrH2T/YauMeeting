@@ -13,5 +13,6 @@ public:
 	void removeUserOnline(const std::string& username);
 	asio::ip::udp::endpoint getUserEndpoint(const std::string& username);
 	bool isUserOnline(const std::string& username);
+	void clearAllUsers();
 
 };

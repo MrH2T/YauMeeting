@@ -8,6 +8,10 @@
 
 #include<windows.h>
 int main(int argc, char* argv[]) {
+	if (argc < 2) {
+		std::cout << "Usage: YauMeetingServer.exe run/register" << std::endl;
+		return 1;
+	}
 	const char* userprof = std::getenv("USERPROFILE");
 	if (!userprof)exit(0);
 	std::string filedirfat = std::string(userprof) + "\\AppData\\Local\\YauMeeting";
@@ -18,6 +22,7 @@ int main(int argc, char* argv[]) {
 
 	Database& db = Database::getInstance();
 	db.initDatabase(filedir);
+	
 
 	if (std::string(argv[1]) == "run")
 	{
@@ -29,7 +34,7 @@ int main(int argc, char* argv[]) {
 		if (argc != 4)
 		{
 			std::cout << "Usage: register <id> <pwd>" << std::endl;
-			return 0;
+			return 1;
 		}
 		std::string id = argv[2];
 		std::string pwd = argv[3];

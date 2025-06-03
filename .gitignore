@@ -8,3 +8,5 @@ YauMeetingServer/x64/
 *.vcxproj.filters
 *.vcxproj.user
 *.sln
+.git/
+x64/

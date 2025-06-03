@@ -1,12 +1,12 @@
 #include "RoomManager.h"
 #include "Room.h"
+#include"Server.h"
 
 int RoomManager::getAvailablePort()
 {
 
 	for (int i = 0; i < Config::MAX_ROOM; ++i) {
 		if (!port_available[i]) {
-			port_available[i] = true;
 			return Config::ROOM_PORT + i;
 		}
 	}
@@ -114,12 +114,30 @@ std::string RoomManager::getRoomPassword(int roomid)
 	return "";
 }
 
-void RoomManager::removeUser(const std::string& username)
+void RoomManager::clearAllRooms()
 {
 	std::lock_guard<std::mutex> lock(room_mutex);
 	for (auto& room : rooms) {
+		delete room.second;
+	}
+	rooms.clear();
+	for (int i = 0; i < Config::MAX_ROOM; ++i) {
+		port_available[i] = false;
+	}
+}
+
+void RoomManager::removeUser(const std::string& username)
+{
+	std::lock_guard<std::mutex> lock(room_mutex);
+	int pres_roomid = -1;
+	for (auto& room : rooms) {
 		if( room.second->isUserInRoom(username)) {
-			room.second->removeUser(username);
+			if (room.second->presenter == username) {
+				pres_roomid = room.first;
+				break;
+			}
+			else room.second->removeUser(username);
 		}
 	}
+	if(pres_roomid!=-1)Server::getInstance().deleteRoom(pres_roomid);
 }

@@ -7,7 +7,7 @@ struct TypeHeader {
 };
 
 //type 1
-struct LoginHeader{
+struct LoginHeader {
 	uint8_t username_len;
 	uint8_t password_len;
 	uint8_t type;

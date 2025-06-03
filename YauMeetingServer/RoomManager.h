@@ -30,5 +30,7 @@ public:
 	int getRoomPort(int roomid);
 	std::set<std::string> getUsersInRoom(int roomid);
 	std::string getRoomPassword(int roomid);
+
+	void clearAllRooms();
 };
 
